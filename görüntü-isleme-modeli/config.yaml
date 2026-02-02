@@ -1,0 +1,91 @@
+# İHA Görüntü İşleme Sistemi Konfigürasyonu
+
+# Kamera Ayarları
+camera:
+  resolution:
+    width: 1920
+    height: 1080
+  fps: 30
+  source: 0  # 0 for default camera, or rtsp://... for IP camera
+
+# Sensör Ayarları
+sensors:
+  pixhawk:
+    connection_string: "udp:127.0.0.1:14550"  # MAVLink bağlantısı
+    baud_rate: 57600
+  gps:
+    enabled: true
+  altitude_sensor:
+    enabled: true
+
+# Görüntü İşleme Modülleri
+image_processing:
+  # PC'den Gelen Tur Bilgisi Kontrolü
+  tour_detection:
+    enabled: true
+    confidence_threshold: 0.5
+
+  # 1. Tur İşleme (Kırmızı/Yeşil/Mavi Filtre)
+  color_filters:
+    red:
+      lower_hsv: [0, 120, 70]
+      upper_hsv: [10, 255, 255]
+    green:
+      lower_hsv: [35, 100, 100]
+      upper_hsv: [85, 255, 255]
+    blue:
+      lower_hsv: [100, 100, 100]
+      upper_hsv: [130, 255, 255]
+
+  # Filtre İşlemleri
+  morphology:
+    kernel_size: 5
+    iterations: 2
+
+  # Filtre Karc (Contour Detection)
+  contour:
+    min_area: 500
+    max_area: 50000
+
+  # 2. Tur İşleme (Sensör Tabanlı - GPS/IMU)
+  sensor_processing:
+    hedefin_merkezli_cok: true
+    range_threshold: 5.0  # metre cinsinden
+
+  # Balistik Hesaplama
+  ballistics:
+    ruzgar_hizi: 0  # m/s
+    hiz_kritik: true
+    percentage_threshold: 0.8
+
+# Hedef Tespit (YOLO)
+detection:
+  model_path: "models/yolov8n.pt"
+  confidence_threshold: 0.5
+  iou_threshold: 0.45
+  classes: ["target", "landing_zone"]
+
+# Karar Mekanizması
+decision:
+  detection_stability_frames: 5  # Karar için gerekli kararlı frame sayısı
+  target_lock_timeout: 30  # saniye
+
+# Ateşleme Sistemi
+firing_system:
+  enabled: true
+  servo_channel: 7  # Pixhawk servo kanalı
+  fire_duration: 1000  # ms
+
+# Lokalizasyon ve Haritalama
+localization:
+  coordinate_system: "WGS84"
+  map_update_rate: 1  # Hz
+  save_trajectory: true
+
+# Logging
+logging:
+  level: "DEBUG"
+  save_logs: true
+  log_dir: "logs"
+  save_images: true
+  image_dir: "logs/images"

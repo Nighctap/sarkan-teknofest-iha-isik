@@ -1,0 +1,3 @@
+"""
+Karar mekanizması modülleri
+"""

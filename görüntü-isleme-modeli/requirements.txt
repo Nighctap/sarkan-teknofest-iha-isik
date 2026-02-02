@@ -1,0 +1,22 @@
+# Computer Vision & Deep Learning
+opencv-python==4.8.1.78
+opencv-contrib-python==4.8.1.78
+torch==2.1.0
+torchvision==0.16.0
+ultralytics==8.0.196  # YOLOv8
+numpy==1.24.3
+pillow==10.0.1
+
+# Communication & Data Processing
+pymavlink==2.4.41  # MAVLink communication with Pixhawk
+dronekit==2.9.2
+pyserial==3.5
+
+# Geolocation & Mapping
+geopy==2.4.0
+folium==0.14.0
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+loguru==0.7.2
